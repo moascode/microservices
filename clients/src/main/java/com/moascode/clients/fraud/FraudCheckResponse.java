@@ -1,4 +1,4 @@
-package com.moascode.customer;
+package com.moascode.clients.fraud;
 
 public record FraudCheckResponse(boolean isFraudster) {
 }
