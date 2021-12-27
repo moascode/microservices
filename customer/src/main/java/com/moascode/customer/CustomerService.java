@@ -2,15 +2,17 @@ package com.moascode.customer;
 
 import com.moascode.clients.fraud.FraudCheckResponse;
 import com.moascode.clients.fraud.FraudClient;
+import com.moascode.clients.notification.NotificationClient;
+import com.moascode.clients.notification.NotificationRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 @Service
 @AllArgsConstructor
 public class CustomerService {
     private final CustomerRepository customerRepository;
     private final FraudClient fraudClient;
+    private final NotificationClient notificationClient;
 
     public void registerCustomer(CustomerRegistrationRequest request) {
         Customer customer = Customer.builder()
@@ -23,10 +25,18 @@ public class CustomerService {
         customerRepository.saveAndFlush(customer);
         FraudCheckResponse fraudCheckResponse = fraudClient.isFraudster(customer.getId());
 
-        if (fraudCheckResponse == null || fraudCheckResponse.isFraudster()){
-            throw  new IllegalStateException("fraudster");
+        if (fraudCheckResponse == null || fraudCheckResponse.isFraudster()) {
+            throw new IllegalStateException("fraudster");
         }
 
-        //todo: send notification
+        //todo: make it async (i.e add to queue)
+        notificationClient.sendNotification(
+                new NotificationRequest(
+                        customer.getId(),
+                        customer.getEmail(),
+                        customer.getFirstName(),
+                        "Customer is registered successfully"
+                )
+        );
     }
 }
