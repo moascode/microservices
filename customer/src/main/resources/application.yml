@@ -26,3 +26,5 @@ eureka:
   instance:
     prefer-ip-address: true
     hostname: localhost
+  rabbitmq:
+    addesses: localhost:5672

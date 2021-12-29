@@ -1,4 +1,4 @@
-package com.moascode;
+package com.moascode.notification;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
