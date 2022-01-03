@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: rabbitmq
+  labels:
+    app: rabbitmq
+spec:
+  serviceName: rabbitmq
+  replicas: 1
+  template:
+    metadata:
+      name: rabbitmq
+      labels:
+        app: rabbitmq
+    spec:
+      volumes:
+        - name: rabbitmq
+          persistentVolumeClaim:
+            claimName: rabbitmq-pc-volume-claim
+      containers:
+        - name: rabbitmq
+          image: rabbitmq:3.9.1-management-alpine
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - mountPath: "/var/lib/rabbitmq/data"
+              name: rabbitmq
+          envFrom:
+            - configMapRef:
+                name: rabbitmq-config
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: rabbitmq

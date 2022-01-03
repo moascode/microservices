@@ -46,30 +46,30 @@ services:
     networks:
       - spring
 
-  eureka-server:
-    image: moascode/eureka-server:latest
-    container_name: eureka-server
-    ports:
-      - "8761:8761"
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
-    networks:
-      - spring
-    depends_on:
-      - zipkin
+#  eureka-server:
+#    image: moascode/eureka-server:latest
+#    container_name: eureka-server
+#    ports:
+#      - "8761:8761"
+#    environment:
+#      - SPRING_PROFILES_ACTIVE=docker
+#    networks:
+#      - spring
+#    depends_on:
+#      - zipkin
 
-  api-gateway:
-    image: moascode/api-gateway:latest
-    container_name: api-gateway
-    ports:
-      - "8083:8083"
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
-    networks:
-      - spring
-    depends_on:
-      - eureka-server
-      - zipkin
+#  api-gateway:
+#    image: moascode/api-gateway:latest
+#    container_name: api-gateway
+#    ports:
+#      - "8083:8083"
+#    environment:
+#      - SPRING_PROFILES_ACTIVE=docker
+#    networks:
+#      - spring
+#    depends_on:
+#      - eureka-server
+#      - zipkin
 
   customer:
     image: moascode/customer:latest
@@ -82,7 +82,6 @@ services:
       - spring
       - postgres
     depends_on:
-      - eureka-server
       - zipkin
       - postgres
       - rabbitmq
@@ -98,7 +97,6 @@ services:
       - spring
       - postgres
     depends_on:
-      - eureka-server
       - zipkin
       - postgres
       - rabbitmq
@@ -114,7 +112,6 @@ services:
       - spring
       - postgres
     depends_on:
-      - eureka-server
       - zipkin
       - postgres
       - rabbitmq
